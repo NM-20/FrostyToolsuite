@@ -374,11 +374,11 @@ namespace MeshSetPlugin
                 boneNodes.Add(boneNode);
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII,
-                ProfileVersion.Battlefield5,
-                ProfileVersion.PlantsVsZombiesBattleforNeighborville,
-                ProfileVersion.StarWarsSquadrons,
-                ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound) && meshAsset != null)
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5,
+                ProfileVersion.PlantsVsZombiesBattleforNeighborville, ProfileVersion.StarWarsSquadrons,
+                ProfileVersion.Madden22, ProfileVersion.Fifa22,
+                ProfileVersion.Battlefield2042, ProfileVersion.Madden23,
+                ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace) && meshAsset != null)
             {
                 int procIndex = 0;
                 dynamic skinnedProcAnim = meshAsset.SkinnedProceduralAnimation;
@@ -436,7 +436,7 @@ namespace MeshSetPlugin
             {
                 foreach (MeshSetSection section in lod.Sections)
                 {
-                    if (section.Name == "")
+                    if (!lod.IsSectionRenderable(section))
                     {
                         continue;
                     }
@@ -587,19 +587,23 @@ namespace MeshSetPlugin
                     if (boneWeights[j] > 0.0f)
                     {
                         int subIndex = boneIndices[j];
-                        if (!ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII,
-                            ProfileVersion.Battlefield5,
-                            ProfileVersion.PlantsVsZombiesBattleforNeighborville,
-                            ProfileVersion.StarWarsSquadrons,
-                            ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound))
-                        {
-                            subIndex = boneList[subIndex];
-                        }
+                        //if (!ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII,
+                        //    ProfileVersion.Battlefield5,
+                        //    ProfileVersion.PlantsVsZombiesBattleforNeighborville,
+                        //    ProfileVersion.StarWarsSquadrons, ProfileVersion.Fifa22,
+                        //    ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound))
+                        //{
+                        //    subIndex = boneList[subIndex];
+                        //}
 
                         // account for proc bones
                         if ((subIndex & 0x8000) != 0)
                         {
                             subIndex = (subIndex - 0x8000) + m_boneCount;
+                        }
+                        else
+                        {
+                            subIndex = boneList[subIndex];
                         }
 
                         while (subIndex >= boneClusters.Count)
